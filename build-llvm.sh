@@ -2,32 +2,36 @@
 
 # adapted from https://github.com/jprendes/emception/blob/master/build-llvm.sh
 
-SRC=$(dirname $0)
+SRC=$(realpath $(dirname $0))
 
-LLVM_SRC="$1"
+LLVM_COMMIT="$1"
 
-if [ "$LLVM_SRC" == "" ]; then
-    LLVM_SRC=$(pwd)/llvm-project
+if [ "$LLVM_COMMIT" == "" ]; then
+    LLVM_COMMIT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
 fi
 
-SRC=$(realpath "$SRC")
+LLVM_SRC="$SRC/llvm-project"
+LLVM_BUILD="$SRC/out/build"
+LLVM_INSTALL="$SRC/out/install"
 
 # If we don't have a copy of LLVM, make one
 if [ ! -d $LLVM_SRC/ ]; then
-    git clone --depth 1 --branch llvmorg-18.1.8 https://github.com/llvm/llvm-project.git "$LLVM_SRC/"
+    git clone --depth 1 https://github.com/llvm/llvm-project.git "$LLVM_SRC/"
 
     pushd $LLVM_SRC/
 
-    # The clang driver will sometimes spawn a new process to avoid memory leaks.
-    # Since this complicates matters quite a lot for us, just disable that.
+    git fetch origin $LLVM_COMMIT
+    git reset --hard $LLVM_COMMIT
+
+
     git apply $SRC/llvm-project.patch
 
     popd
 fi
 
-if [ ! -d $LLVM_SRC/build ]; then
+if [ ! -d $LLVM_BUILD ]; then
     CXXFLAGS="-Dwait4=__syscall_wait4" \
-    emcmake cmake -G Ninja -S $LLVM_SRC/llvm -B $LLVM_SRC/build \
+    emcmake cmake -G Ninja -S $LLVM_SRC/llvm -B $LLVM_BUILD \
         -DCMAKE_BUILD_TYPE="Release" \
         -DLLVM_BUILD_DOCS="OFF" \
         -DLLVM_BUILD_TOOLS="ON" \
@@ -54,5 +58,5 @@ if [ ! -d $LLVM_SRC/build ]; then
         -DLLVM_TARGET_ARCH="wasm32-wasi"
 fi
 
-cmake --build $LLVM_SRC/build
-cmake -DCMAKE_INSTALL_PREFIX=$LLVM_SRC/install -P $LLVM_SRC/build/cmake_install.cmake
+cmake --build $LLVM_BUILD
+cmake -DCMAKE_INSTALL_PREFIX=$SRC/out/install -P $LLVM_BUILD/cmake_install.cmake
