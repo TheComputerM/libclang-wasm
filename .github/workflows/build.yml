@@ -4,6 +4,11 @@ name: Build libclang.wasm
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      llvmCommit:
+        description: 'commit SHA of the llvm-project repository'
+        required: true
+        default: '3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff'
 
 env:
   EM_VERSION: 3.1.61
@@ -16,19 +21,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Cache emscripten
+
+      - uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: cache emscripten
         id: cache-system-libraries
         uses: actions/cache@v4
         with:
           path: ${{env.EM_CACHE_FOLDER}}
           key: ${{env.EM_VERSION}}-${{ runner.os }}
 
-      - name: Setup emscripten
+      - name: setup emscripten
         uses: mymindstorm/setup-emsdk@v14
         with:
           version: ${{env.EM_VERSION}}
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
-      - name: Build llvm-project
-        run: ${{ github.workspace }}/build-llvm.sh
+      - name: fetch and build llvm-project
+        run: ${{ github.workspace }}/build-llvm.sh ${{ inputs.llvmCommit }}
+
+      
