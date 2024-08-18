@@ -1,17 +1,13 @@
 #!/bin/bash
 
-SRC=$(dirname $0)
+SRC=$(realpath $(dirname $0))
 
-LLVM_SRC="$1"
+LLVM_SRC="$SRC/llvm-project"
+LLVM_INSTALL="$SRC/out/install"
+LIBCLANG_BIN="$SRC/out/bin"
 
-if [ "$LLVM_SRC" == "" ]; then
-    LLVM_SRC=$(pwd)/llvm-project
-fi
-
-SRC=$(realpath "$SRC")
-
-emcc $LLVM_SRC/install/lib/*.a --no-entry \
+emcc $LLVM_INSTALL/lib/*.a --no-entry \
     -sEXPORTED_FUNCTIONS=@$SRC/exports.txt \
     -sALLOW_MEMORY_GROWTH \
-    -o $SRC/bin/libclang.mjs
+    -o $LIBCLANG_BIN/libclang.mjs
     

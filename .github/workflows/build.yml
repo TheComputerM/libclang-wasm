@@ -38,6 +38,6 @@ jobs:
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
       - name: fetch and build llvm-project
-        run: ${{ github.workspace }}/build-llvm.sh ${{ inputs.llvmCommit }}
+        run: ./build-llvm.sh ${{ inputs.llvmCommit }}
 
       
