@@ -6,8 +6,10 @@ LLVM_SRC="$SRC/llvm-project"
 LLVM_INSTALL="$SRC/out/install"
 LIBCLANG_BIN="$SRC/out/bin"
 
+mkdir -p $LIBCLANG_BIN
+
 emcc $LLVM_INSTALL/lib/*.a --no-entry \
-    -sEXPORTED_FUNCTIONS=@$SRC/exports.txt \
+    -sEXPORTED_FUNCTIONS=@exports.txt \
     -sALLOW_MEMORY_GROWTH \
     -o $LIBCLANG_BIN/libclang.mjs
     

@@ -393,3 +393,5 @@ _clang_tokenize
 _clang_uninstall_llvm_fatal_error_handler
 _clang_visitChildren
 _clang_visitChildrenWithBlock
+_malloc
+_free
