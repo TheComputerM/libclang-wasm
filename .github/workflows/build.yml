@@ -1,12 +1,10 @@
-name: Build libclang.wasm
+name: build libclang.wasm
 
-# Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       llvmCommit:
-        description: 'commit SHA of the llvm-project repository'
+        description: 'llvm-project commit SHA'
         required: true
         default: '3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff'
 
@@ -15,13 +13,13 @@ env:
   EM_CACHE_FOLDER: 'emsdk-cache'
 
 jobs:
-  build:
-    # The type of runner that the job will run on
+  _:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
+      # setup the ninja build tool
       - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - name: cache emscripten
@@ -36,8 +34,28 @@ jobs:
         with:
           version: ${{env.EM_VERSION}}
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
-
+      
+      # build llvm from source
       - name: fetch and build llvm-project
         run: ./build-llvm.sh ${{ inputs.llvmCommit }}
 
+      - name: build libclang.wasm
+        run: ./build-libclang.sh
       
+      # pack the outputs for release
+      - name: tar assets
+        working-directory: ./out
+        run: |
+          tar cvzf ./release/llvm-build.tar.gz ./install/
+          tar cvzf ./release/libclang.tar.gz ./bin/
+      
+      # create a draft release
+      - name: draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "libclang.wasm"
+          body: "libclang.wasm built using the ${{ inputs.llvmCommit }} commit of the llvm-project"
+          draft: true
+          files: |
+            ./out/release/llvm-build.tar.gz
+            ./out/release/libclang.tar.gz
