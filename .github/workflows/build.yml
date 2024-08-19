@@ -48,15 +48,15 @@ jobs:
         working-directory: ./out
         run: |
           mkdir -p ./release
-          tar cvzf ./release/llvm-build.tar.gz ./install/
-          tar cvzf ./release/libclang.tar.gz ./bin/
+          tar cvzf ./release/llvm-build.tar.gz -C ./install .
+          tar cvzf ./release/libclang.tar.gz -C ./bin .
       
       # create a draft release
       - name: draft release
         uses: softprops/action-gh-release@v2
         with:
           name: "lllvm-project ${{ inputs.llvmCommit }} + emcc ${{ env.EM_VERSION }}"
-          body: "libclang.wasm built with emcc ${{ env.EM_VERSION }} using the ${{ inputs.llvmCommit }} commit of the llvm-project"
+          body: "Built with emcc ${{ env.EM_VERSION }} using https://github.com/llvm/llvm-project/commit/${{ inputs.llvmCommit }}"
           draft: true
           files: |
             ./out/release/llvm-build.tar.gz
