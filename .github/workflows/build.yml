@@ -53,9 +53,11 @@ jobs:
       # create a draft release
       - name: draft release
         uses: softprops/action-gh-release@v2
+        permissions:
+          contents: write
         with:
-          name: "libclang.wasm"
-          body: "libclang.wasm built using the ${{ inputs.llvmCommit }} commit of the llvm-project"
+          name: "lllvm-project ${{ inputs.llvmCommit }} + emcc ${{ env.EM_VERSION }}"
+          body: "libclang.wasm built with emcc ${{ env.EM_VERSION }} using the ${{ inputs.llvmCommit }} commit of the llvm-project"
           draft: true
           files: |
             ./out/release/llvm-build.tar.gz
