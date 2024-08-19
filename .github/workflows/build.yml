@@ -46,6 +46,7 @@ jobs:
       - name: tar assets
         working-directory: ./out
         run: |
+          mkdir -p ./release
           tar cvzf ./release/llvm-build.tar.gz ./install/
           tar cvzf ./release/libclang.tar.gz ./bin/
       
