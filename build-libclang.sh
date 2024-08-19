@@ -10,6 +10,8 @@ mkdir -p $LIBCLANG_BIN
 
 emcc $LLVM_INSTALL/lib/*.a --no-entry \
     -sEXPORTED_FUNCTIONS=@exports.txt \
-    -sALLOW_MEMORY_GROWTH \
+    -sWASM_BIGINT \
+    -sALLOW_MEMORY_GROWTH -sALLOW_TABLE_GROWTH \
+    -sEXPORTED_RUNTIME_METHODS=FS,wasmExports,addFunction,removeFunction \
     -o $LIBCLANG_BIN/libclang.mjs
     
