@@ -15,7 +15,8 @@ env:
 jobs:
   _:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -53,8 +54,6 @@ jobs:
       # create a draft release
       - name: draft release
         uses: softprops/action-gh-release@v2
-        permissions:
-          contents: write
         with:
           name: "lllvm-project ${{ inputs.llvmCommit }} + emcc ${{ env.EM_VERSION }}"
           body: "libclang.wasm built with emcc ${{ env.EM_VERSION }} using the ${{ inputs.llvmCommit }} commit of the llvm-project"
