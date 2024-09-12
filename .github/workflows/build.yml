@@ -7,9 +7,13 @@ on:
         description: 'llvm-project commit SHA'
         required: true
         default: '3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff'
+      emscriptenVersion:
+        description: 'emscripten version'
+        required: true
+        default: '3.1.61'
 
 env:
-  EM_VERSION: 3.1.61
+  EM_VERSION: ${{ inputs.emscriptenVersion }}
   EM_CACHE_FOLDER: 'emsdk-cache'
 
 jobs:
