@@ -1,8 +1,20 @@
+diff --git a/clang/CMakeLists.txt b/clang/CMakeLists.txt
+index 1bb73599970c..085174be24d0 100644
+--- a/clang/CMakeLists.txt
++++ b/clang/CMakeLists.txt
+@@ -437,6 +437,7 @@ CMAKE_DEPENDENT_OPTION(CLANG_PLUGIN_SUPPORT
+ if(NOT LLVM_STATIC_LINK_CXX_STDLIB)
+   set(HAVE_CLANG_REPL_SUPPORT ON)
+ endif()
++set(HAVE_CLANG_REPL_SUPPORT OFF)
+ 
+ option(CLANG_ENABLE_OBJC_REWRITER "Build the Objective-C rewriter tool" OFF)
+ 
 diff --git a/llvm/lib/Support/Unix/Path.inc b/llvm/lib/Support/Unix/Path.inc
-index 9f89d63bb..ab275ebbd 100644
+index 277247e3cc23..6fe4ffb3f851 100644
 --- a/llvm/lib/Support/Unix/Path.inc
 +++ b/llvm/lib/Support/Unix/Path.inc
-@@ -191,7 +191,9 @@ static char *getprogpath(char ret[PATH_MAX], const char *bin) {
+@@ -189,7 +189,9 @@ static char *getprogpath(char ret[PATH_MAX], const char *bin) {
  /// GetMainExecutable - Return the path to the main executable, given the
  /// value of argv[0] from program startup.
  std::string getMainExecutable(const char *argv0, void *MainAddr) {

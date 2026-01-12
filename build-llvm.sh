@@ -7,7 +7,8 @@ SRC=$(realpath $(dirname $0))
 LLVM_COMMIT="$1"
 
 if [ "$LLVM_COMMIT" == "" ]; then
-    LLVM_COMMIT="3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff"
+    # version 21.1.8
+    LLVM_COMMIT="2078da43e25a4623cab2d0d60decddf709aaea28"
 fi
 
 LLVM_SRC="$SRC/llvm-project"
@@ -45,7 +46,6 @@ if [ ! -d $LLVM_BUILD ]; then
         -DLLVM_ENABLE_OCAMLDOC="OFF" \
         -DLLVM_ENABLE_PIC="OFF" \
         -DLLVM_ENABLE_PROJECTS="clang" \
-        -DLLVM_ENABLE_TERMINFO="OFF" \
         -DLLVM_ENABLE_THREADS="OFF" \
         -DLLVM_ENABLE_UNWIND_TABLES="OFF" \
         -DLLVM_ENABLE_ZLIB="OFF" \

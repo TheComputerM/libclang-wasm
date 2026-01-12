@@ -21,3 +21,5 @@ There are bash scripts you can use to [setup, patch and build the llvm project](
 You can also find some prebuilt archives on the releases page.
 
 The reason why we patch the llvm-project is to provide a **fake** path to the main executable (which does not exist in WASM) but is useful for locating other resources and identifying default header locations.
+
+The exports.txt file includes the symbols from llvm-project/clang/tools/libclang/libclang.map till the version being used.
