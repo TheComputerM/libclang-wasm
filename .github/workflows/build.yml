@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       llvmCommit:
-        description: 'llvm-project commit SHA'
+        description: "llvm-project commit SHA"
         required: true
-        default: '3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff'
+        default: "2078da43e25a4623cab2d0d60decddf709aaea28"
       emscriptenVersion:
-        description: 'emscripten version'
+        description: "emscripten version"
         required: true
-        default: '3.1.61'
+        default: "4.0.22"
 
 env:
   EM_VERSION: ${{ inputs.emscriptenVersion }}
-  EM_CACHE_FOLDER: 'emsdk-cache'
+  EM_CACHE_FOLDER: "emsdk-cache"
 
 jobs:
   _:
@@ -39,14 +39,14 @@ jobs:
         with:
           version: ${{env.EM_VERSION}}
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
-      
+
       # build llvm from source
       - name: fetch and build llvm-project
         run: ./build-llvm.sh ${{ inputs.llvmCommit }}
 
       - name: build libclang.wasm
         run: ./build-libclang.sh
-      
+
       # pack the outputs for release
       - name: tar assets
         working-directory: ./out
@@ -54,7 +54,7 @@ jobs:
           mkdir -p ./release
           tar cvzf ./release/llvm-build.tar.gz -C ./install .
           tar cvzf ./release/libclang.tar.gz -C ./bin .
-      
+
       # create a draft release
       - name: draft release
         uses: softprops/action-gh-release@v2
