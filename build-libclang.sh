@@ -13,5 +13,5 @@ emcc $LLVM_INSTALL/lib/*.a --no-entry \
     -sWASM_BIGINT \
     -sALLOW_MEMORY_GROWTH -sALLOW_TABLE_GROWTH \
     -sEXPORTED_RUNTIME_METHODS=FS,wasmExports,addFunction,removeFunction \
+    -sMODULARIZE -sEXPORT_NAME=libclang \
     -o $LIBCLANG_BIN/libclang.mjs
-    
